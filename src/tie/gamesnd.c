@@ -128,6 +128,7 @@ void gamesnd_Transition_Sound(void) {
 	lolevel_ImStopAllSounds();
 	filelist_ImUnloadAll();
 	lolevel_ImClearTrigger(-1, -1, -1);
+	cdaudio_Stop_Track(); // Ensure CD audio stops during transition
 	frontendflag = 2;
 }
 
