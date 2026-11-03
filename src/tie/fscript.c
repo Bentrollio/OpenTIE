@@ -368,8 +368,10 @@ int16_t fscript_MsRefreshScript(void) {
 
 // FUNCTION: TIE95 0x2406C
 int16_t fscript_MsSetState(int16_t new_state) {
-	if (new_state >= 0 && new_state < 12 && new_state != currentState)
+	if (new_state >= 0 && new_state < 12 && new_state != currentState) {
+		lolevel_ImStopAllSounds(); // Force stop lingering script audio before changing state
 		fscript_ChangeState(new_state);
+	}
 	return currentState;
 }
 

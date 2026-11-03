@@ -141,6 +141,7 @@ void gamesnd_Transition_Sound(void) {
 void gamesnd_game_Open_iMuse(void) {
 	lolevel_ImStopAllSounds();
 	filelist_ImUnloadAll();
+	cdaudio_Stop_Track(); // Ensure CD audio stops during transition
 	frontendflag = 0;
 	lolevel_ImPause();
 	filelist_ImInitFilelist(TieImuse_LoadFlightMusic, TieImuse_UnloadFlightMusic, NULL, NULL);
