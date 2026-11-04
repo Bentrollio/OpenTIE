@@ -2,7 +2,6 @@
 #include "tie/fcallbk.h"
 #include "tie_runtime/audio/imuse_api.h"
 #include "tie_runtime/audio/imuse_session.h"
-#include "tie/cdaudio_tie98.h"
 
 #include <imuse/filelist.h>
 #include <imuse/hilevel.h>
@@ -369,10 +368,8 @@ int16_t fscript_MsRefreshScript(void) {
 
 // FUNCTION: TIE95 0x2406C
 int16_t fscript_MsSetState(int16_t new_state) {
-	if (new_state >= 0 && new_state < 12 && new_state != currentState) {
-		lolevel_ImStopAllSounds(); // Force stop lingering script audio before changing state
+	if (new_state >= 0 && new_state < 12 && new_state != currentState)
 		fscript_ChangeState(new_state);
-	}
 	return currentState;
 }
 
@@ -457,7 +454,6 @@ static void fscript_ChangeState(int new_state) {
 		/* Case 2: from active to idle — stop everything */
 		lolevel_ImStopAllSounds();
 		filelist_ImUnloadAll();
-		cdaudio_Stop_Track(); // Kill active CD audio on state change
 		sequenceID = 0;
 		nextID = 0;
 		currentID = 0;
@@ -499,8 +495,6 @@ static void fscript_ChangeState(int new_state) {
 
 	/* Swap next sound under pause */
 	lolevel_ImPause();
-	lolevel_ImStopSound(currentID); // Stop current sound before unloading to avoid a race condition
-	cdaudio_Stop_Track(); // Kill active CD audio on state change
 	filelist_ImUnloadSound(nextID);
 	nextID = new_handle;
 	currentSdp = sdp;
@@ -524,8 +518,6 @@ static void fscript_PlaySequence(int seq_id) {
 			lolevel_ImResume();
 			return;
 		}
-		lolevel_ImStopSound(sequenceID); // Force-stop current sequence before unloading
-		cdaudio_Stop_Track(); // Kill active CD audio on sequence chan+++e
 		filelist_ImUnloadSound(sequenceID);
 		sequenceID = 0;
 		currentSequence = 0;
