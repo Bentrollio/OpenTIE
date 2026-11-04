@@ -12,7 +12,7 @@
 
 enum {
 	NUM_STATES = 12,
-	SDP_STRIDE = 62
+	SDP_STRIDE = 62,
 	SDP_TERMINAL = 0x0C,
 	SEQ_SMALLWIN = 2,
 	PARAM_MARKER = 256,
@@ -525,7 +525,7 @@ static void fscript_PlaySequence(int seq_id) {
 			return;
 		}
 		lolevel_ImStopSound(sequenceID); // Force-stop current sequence before unloading
-		cdaudio_Stop_Track(); // Kill active CD audio on sequence change
+		cdaudio_Stop_Track(); // Kill active CD audio on sequence chan+++e
 		filelist_ImUnloadSound(sequenceID);
 		sequenceID = 0;
 		currentSequence = 0;
