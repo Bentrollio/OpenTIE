@@ -2,6 +2,7 @@
 #include "tie/fcallbk.h"
 #include "tie_runtime/audio/imuse_api.h"
 #include "tie_runtime/audio/imuse_session.h"
+#include "tie/cdaudio_tie98.h"
 
 #include <imuse/filelist.h>
 #include <imuse/hilevel.h>
@@ -11,7 +12,7 @@
 
 enum {
 	NUM_STATES = 12,
-	SDP_STRIDE = 62,
+	SDP_STRIDE = 62
 	SDP_TERMINAL = 0x0C,
 	SEQ_SMALLWIN = 2,
 	PARAM_MARKER = 256,
@@ -456,6 +457,7 @@ static void fscript_ChangeState(int new_state) {
 		/* Case 2: from active to idle — stop everything */
 		lolevel_ImStopAllSounds();
 		filelist_ImUnloadAll();
+		cdaudio_Stop_Track(); // Kill active CD audio on state change
 		sequenceID = 0;
 		nextID = 0;
 		currentID = 0;
@@ -498,6 +500,7 @@ static void fscript_ChangeState(int new_state) {
 	/* Swap next sound under pause */
 	lolevel_ImPause();
 	lolevel_ImStopSound(currentID); // Stop current sound before unloading to avoid a race condition
+	cdaudio_Stop_Track(); // Kill active CD audio on state change
 	filelist_ImUnloadSound(nextID);
 	nextID = new_handle;
 	currentSdp = sdp;
@@ -522,6 +525,7 @@ static void fscript_PlaySequence(int seq_id) {
 			return;
 		}
 		lolevel_ImStopSound(sequenceID); // Force-stop current sequence before unloading
+		cdaudio_Stop_Track(); // Kill active CD audio on sequence change
 		filelist_ImUnloadSound(sequenceID);
 		sequenceID = 0;
 		currentSequence = 0;
