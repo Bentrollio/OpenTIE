@@ -18,6 +18,8 @@
 #include "tie_runtime/runtime/profile.h"
 #include "tie_runtime/storage/storage.h"
 
+#include "tie/wavestream_tie98.h"
+
 #include "landru/sound.h"
 
 #include <imuse/commands.h>
@@ -125,6 +127,7 @@ void gamesnd_game_Set_Flight_Sound(void) { gamesnd_Transition_Sound(); }
 // FUNCTION: TIE95 0x88EB0
 // FUNCTION: TIE98 0x425440
 void gamesnd_Transition_Sound(void) {
+	FrontendWaveStream_Shutdown(); // stop the front-end wave stream before draining the engine
 	lolevel_ImStopAllSounds();
 	filelist_ImUnloadAll();
 	lolevel_ImClearTrigger(-1, -1, -1);
@@ -138,6 +141,7 @@ void gamesnd_Transition_Sound(void) {
  * active sounds and swaps the filelist callback pair. */
 // FUNCTION: TIE95 0x88EF6
 void gamesnd_game_Open_iMuse(void) {
+	FrontendWaveStream_Shutdown(); // stop the front-end wave stream before draining the engine
 	lolevel_ImStopAllSounds();
 	filelist_ImUnloadAll();
 	frontendflag = 0;

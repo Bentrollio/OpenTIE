@@ -214,6 +214,9 @@ void soundext_Close_Sound_Scene(int16_t scene, int16_t next_scene) {
 	flight = (uint16_t)next_scene >= 2 && (uint16_t)next_scene <= 4;
 
 	if (shellext_Is_Sudden_Scene_End() || flight) {
+		if (TieMusicPolicy_UsesTie98()) {
+			FrontendWaveStream_Shutdown();
+		}
 		for (snd = xsound_Ask_Sound_List(); snd; snd = snd->next) {
 			if (snd->type == digitalSound)
 				xsound_Stop_Sound(snd);
