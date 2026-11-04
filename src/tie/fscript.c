@@ -497,6 +497,7 @@ static void fscript_ChangeState(int new_state) {
 
 	/* Swap next sound under pause */
 	lolevel_ImPause();
+	lolevel_ImStopSound(currentID); // Stop current sound before unloading to avoid a race condition
 	filelist_ImUnloadSound(nextID);
 	nextID = new_handle;
 	currentSdp = sdp;
@@ -520,6 +521,7 @@ static void fscript_PlaySequence(int seq_id) {
 			lolevel_ImResume();
 			return;
 		}
+		lolevel_ImStopSound(sequenceID); // Force-stop current sequence before unloading
 		filelist_ImUnloadSound(sequenceID);
 		sequenceID = 0;
 		currentSequence = 0;
