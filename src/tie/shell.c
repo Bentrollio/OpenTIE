@@ -148,6 +148,11 @@ int32_t shell_Shell(int32_t scene, int32_t script) {
 			if (TieMusicPolicy_UsesTie98()) {
 
 				switch (cur_scene) {
+					case SCENE_REGISTER:
+					case SCENE_EXIT:
+						FrontendWaveStream_Shutdown();
+						music_path = NULL;
+						break;
 					case SCENE_MAIN_MENU:
 						music_path = "music/concourse.wav";
 						break;
@@ -525,7 +530,7 @@ int32_t shell_Shell(int32_t scene, int32_t script) {
 #ifdef TIE_MODERN
 		if (continuation->phase == SHELL_PHASE_AWAITING) {
 			next_scene = xerror_Get_Landru_Exit();
-			if (owns_music || TieMusicPolicy_UsesTie98()) {
+			if (owns_music || TieMusicPolicy_UsesTie98() && (cur_scene == SCENE_COMBAT_A || cur_scene == SCENE_COMBAT_B || cur_scene == SCENE_TRAIN_A || cur_scene == SCENE_TRAIN_B)) {
 				FrontendWaveStream_Shutdown();
 				continuation->owns_tie98_music = false;
 			}
